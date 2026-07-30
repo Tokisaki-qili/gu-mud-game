@@ -1,14 +1,8 @@
 // ==================== UI 系统 ====================
 function updateUI(){
-  // 桌面端
-  document.getElementById('stat-rank').textContent=RANK_NAMES[player.rank]+'·'+RANK_SUB[player.rankSub];
-  document.getElementById('stat-hp').textContent=player.hp+'/'+player.maxHp;
-  document.getElementById('stat-essence').textContent=player.essence+'/'+player.maxEssence;
-  document.getElementById('stat-gold').textContent=player.gold;
-  document.getElementById('stat-atk').textContent=player.atk;
-  document.getElementById('stat-def').textContent=player.def;
-  document.getElementById('stat-aperture').textContent=player.apertureSlots.length+'/'+player.apertureSize;
-  // 移动端状态条
+  // 先构建状态元素
+  buildPlayerStats();
+  // 移动端底部状态条
   document.getElementById('msb-rank').textContent=RANK_NAMES[player.rank]+'·'+RANK_SUB[player.rankSub];
   document.getElementById('msb-hp').textContent=player.hp+'/'+player.maxHp;
   document.getElementById('msb-essence').textContent=player.essence+'/'+player.maxEssence;
@@ -20,7 +14,7 @@ function updateUI(){
     if(!gu)return;
     const div=document.createElement('div');
     div.className='inv-item gu-rank'+gu.rank;
-div.innerHTML='🐛 <span class="gu-name">'+gu.name+'</span> <span style="font-size:11px;color:#8a7a60">'+RANK_NAMES[gu.rank]+'</span>';
+    div.innerHTML='🐛 <span class="gu-name">'+gu.name+'</span> <span style="font-size:11px;color:#8a7a60">'+RANK_NAMES[gu.rank]+'</span>';
     div.title=gu.desc||'';
     div.onclick=()=>{unequipGu(i)};
     guList.appendChild(div);
@@ -34,8 +28,6 @@ div.innerHTML='🐛 <span class="gu-name">'+gu.name+'</span> <span style="font-s
     span.className='achievement-badge';span.textContent=a;
     achList.appendChild(span);
   });
-  // 移动端同步
-  buildPlayerStats();
 }
 function buildPlayerStats(){
   const container=document.getElementById('player-stats');
