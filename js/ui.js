@@ -1,53 +1,30 @@
 // ==================== UI 系统 ====================
 function updateUI(){
-  // 桌面端状态（直接更新HTML中已有的元素，不重建）
-  document.getElementById('stat-name').textContent=player.name;
-  document.getElementById('stat-rank').textContent=RANK_NAMES[player.rank]+'·'+RANK_SUB[player.rankSub];
-  document.getElementById('stat-hp').textContent=player.hp+'/'+player.maxHp;
-  document.getElementById('stat-essence').textContent=player.essence+'/'+player.maxEssence;
-  document.getElementById('stat-gold').textContent=player.gold;
-  document.getElementById('stat-atk').textContent=player.atk;
-  document.getElementById('stat-def').textContent=player.def;
-  document.getElementById('stat-aperture').textContent=player.apertureSlots.length+'/'+player.apertureSize;
-  // 移动端底部状态条
-  document.getElementById('msb-rank').textContent=RANK_NAMES[player.rank]+'·'+RANK_SUB[player.rankSub];
-  document.getElementById('msb-hp').textContent=player.hp+'/'+player.maxHp;
-  document.getElementById('msb-essence').textContent=player.essence+'/'+player.maxEssence;
-  document.getElementById('msb-gold').textContent=player.gold;
-  // 桌面空窍列表
-  const guList=document.getElementById('gu-list');
-  guList.innerHTML='';
-  player.apertureSlots.forEach((gu,i)=>{
-    if(!gu)return;
-    const div=document.createElement('div');
-    div.className='inv-item gu-rank'+gu.rank;
-    div.innerHTML='🐛 <span class="gu-name">'+gu.name+'</span> <span style="font-size:11px;color:#8a7a60">'+RANK_NAMES[gu.rank]+'</span>';
-    div.title=gu.desc||'';
-    div.onclick=()=>{unequipGu(i)};
-    guList.appendChild(div);
-  });
-  if(player.apertureSlots.length===0)guList.innerHTML='<span style="color:#8a7a60;font-size:12px;">空窍中暂无蛊虫</span>';
-  // 成就
-  const achList=document.getElementById('achievement-list');
-  achList.innerHTML='';
-  player.achievements.forEach(a=>{
-    const span=document.createElement('span');
-    span.className='achievement-badge';span.textContent=a;
-    achList.appendChild(span);
-  });
-  // 移动端同步
-  const ms=document.getElementById('mobile-stats');
-  ms.innerHTML='';
-  ['姓名|'+player.name,'修为|'+RANK_NAMES[player.rank]+'·'+RANK_SUB[player.rankSub],'生命|'+player.hp+'/'+player.maxHp,'真元|'+player.essence+'/'+player.maxEssence,'灵石|'+player.gold,'攻击|'+player.atk,'防御|'+player.def,'空窍容量|'+player.apertureSlots.length+'/'+player.apertureSize].forEach(row=>{
-    const parts=row.split('|');
-    const div=document.createElement('div');div.className='stat-row';
-    div.innerHTML='<span class="stat-label">'+parts[0]+'</span><span class="stat-value">'+parts[1]+'</span>';
-    ms.appendChild(div);
-  });
-  const mgl=document.getElementById('mobile-gu-list');mgl.innerHTML='';
-  player.apertureSlots.forEach((gu,i)=>{if(!gu)return;const div=document.createElement('div');div.className='inv-item gu-rank'+gu.rank;div.innerHTML='🐛 <span class="gu-name">'+gu.name+'</span> '+RANK_NAMES[gu.rank];div.onclick=()=>{unequipGu(i)};mgl.appendChild(div);});
-  const mal=document.getElementById('mobile-achi-list');mal.innerHTML='';
-  player.achievements.forEach(a=>{const span=document.createElement('span');span.className='achievement-badge';span.textContent=a;mal.appendChild(span);});
+  try{
+    var el=document.getElementById('stat-name');if(el)el.textContent=player.name;
+    el=document.getElementById('stat-rank');if(el)el.textContent=RANK_NAMES[player.rank]+'·'+RANK_SUB[player.rankSub];
+    el=document.getElementById('stat-hp');if(el)el.textContent=player.hp+'/'+player.maxHp;
+    el=document.getElementById('stat-essence');if(el)el.textContent=player.essence+'/'+player.maxEssence;
+    el=document.getElementById('stat-gold');if(el)el.textContent=player.gold;
+    el=document.getElementById('stat-atk');if(el)el.textContent=player.atk;
+    el=document.getElementById('stat-def');if(el)el.textContent=player.def;
+    el=document.getElementById('stat-aperture');if(el)el.textContent=player.apertureSlots.length+'/'+player.apertureSize;
+    el=document.getElementById('msb-rank');if(el)el.textContent=RANK_NAMES[player.rank]+'·'+RANK_SUB[player.rankSub];
+    el=document.getElementById('msb-hp');if(el)el.textContent=player.hp+'/'+player.maxHp;
+    el=document.getElementById('msb-essence');if(el)el.textContent=player.essence+'/'+player.maxEssence;
+    el=document.getElementById('msb-gold');if(el)el.textContent=player.gold;
+    var guList=document.getElementById('gu-list');if(guList){guList.innerHTML='';
+    player.apertureSlots.forEach(function(gu,i){if(!gu)return;var d=document.createElement('div');d.className='inv-item gu-rank'+gu.rank;d.innerHTML='🐛 <span class="gu-name">'+gu.name+'</span> <span style="font-size:11px;color:#8a7a60">'+RANK_NAMES[gu.rank]+'</span>';d.title=gu.desc||'';d.onclick=function(){unequipGu(i)};guList.appendChild(d);});
+    if(player.apertureSlots.length===0)guList.innerHTML='<span style="color:#8a7a60;font-size:12px;">空窍中暂无蛊虫</span>';}
+    var achList=document.getElementById('achievement-list');if(achList){achList.innerHTML='';
+    player.achievements.forEach(function(a){var s=document.createElement('span');s.className='achievement-badge';s.textContent=a;achList.appendChild(s);});}
+    var ms=document.getElementById('mobile-stats');if(ms){ms.innerHTML='';
+    ['姓名|'+player.name,'修为|'+RANK_NAMES[player.rank]+'·'+RANK_SUB[player.rankSub],'生命|'+player.hp+'/'+player.maxHp,'真元|'+player.essence+'/'+player.maxEssence,'灵石|'+player.gold,'攻击|'+player.atk,'防御|'+player.def,'空窍容量|'+player.apertureSlots.length+'/'+player.apertureSize].forEach(function(row){var p=row.split('|');var d=document.createElement('div');d.className='stat-row';d.innerHTML='<span class="stat-label">'+p[0]+'</span><span class="stat-value">'+p[1]+'</span>';ms.appendChild(d);});}
+    var mgl=document.getElementById('mobile-gu-list');if(mgl){mgl.innerHTML='';
+    player.apertureSlots.forEach(function(gu,i){if(!gu)return;var d=document.createElement('div');d.className='inv-item gu-rank'+gu.rank;d.innerHTML='🐛 <span class="gu-name">'+gu.name+'</span> '+RANK_NAMES[gu.rank];d.onclick=function(){unequipGu(i)};mgl.appendChild(d);});}
+    var mal=document.getElementById('mobile-achi-list');if(mal){mal.innerHTML='';
+    player.achievements.forEach(function(a){var s=document.createElement('span');s.className='achievement-badge';s.textContent=a;mal.appendChild(s);});}
+  }catch(e){}
 }
 
 function showInventory(){

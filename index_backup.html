@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>蛊真人 · 文字MUD</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div id="bg-pattern"></div>
+
+<!-- 主容器 -->
+<div id="game-container">
+  <!-- 左侧故事区 -->
+  <div id="main-panel">
+    <div id="story-scroll">
+      <div id="story-output"></div>
+    </div>
+    <div id="choice-panel"><span class="choices-title">— 请选择你的行动 —</span></div>
+  </div>
+  <!-- 桌面端侧边栏 -->
+  <div id="side-panel" class="desktop-sidebar">
+    <div class="panel-header"><span class="panel-icon">📜</span> 蛊师卷宗</div>
+    <div id="player-stats">
+      <div class="stat-row"><span class="stat-label">姓名</span><span class="stat-value" id="stat-name">古月方源</span></div>
+      <div class="stat-row"><span class="stat-label">修为</span><span class="stat-value rank" id="stat-rank">一转·初阶</span></div>
+      <div class="stat-row"><span class="stat-label">生命</span><span class="stat-value health" id="stat-hp">100/100</span></div>
+      <div class="stat-row"><span class="stat-label">真元</span><span class="stat-value essence" id="stat-essence">50/50</span></div>
+      <div class="stat-row"><span class="stat-label">灵石</span><span class="stat-value gold" id="stat-gold">0</span></div>
+      <div class="stat-row"><span class="stat-label">攻击</span><span class="stat-value" id="stat-atk">5</span></div>
+      <div class="stat-row"><span class="stat-label">防御</span><span class="stat-value" id="stat-def">2</span></div>
+      <div class="stat-row"><span class="stat-label">空窍容量</span><span class="stat-value" id="stat-aperture">0/5</span></div>
+    </div>
+    <div class="panel-header sub"><span class="panel-icon">🐛</span> 空窍蛊虫</div>
+    <div id="gu-list"></div>
+    <div class="panel-header sub"><span class="panel-icon">🏆</span> 成就</div>
+    <div id="achievement-list"></div>
+  </div>
+</div>
+
+<!-- 顶部工具栏 -->
+<div id="toolbar">
+  <button class="tb-btn" onclick="showInventory()">🎒</button>
+  <button class="tb-btn" onclick="showAperture()">💠</button>
+  <button class="tb-btn" onclick="showEquipment()">⚔️</button>
+  <button class="tb-btn" onclick="showFusion()">🔥</button>
+  <button class="tb-btn" onclick="showKillerMoves()">✨</button>
+  <button class="tb-btn" onclick="showAchievements()">🏆</button>
+  <button class="tb-btn" onclick="saveGame()">💾</button>
+  <button class="tb-btn" onclick="loadGame()">📂</button>
+  <button class="tb-btn" onclick="showHelp()">❓</button>
+</div>
+
+<!-- 移动端底部角色信息条 -->
+<div id="mobile-stat-bar" onclick="toggleMobilePanel()">
+  <div class="msb-item"><span class="msb-label">修为</span><span class="msb-value" id="msb-rank">一转·初阶</span></div>
+  <div class="msb-item"><span class="msb-label">生命</span><span class="msb-value health" id="msb-hp">100/100</span></div>
+  <div class="msb-item"><span class="msb-label">真元</span><span class="msb-value essence" id="msb-essence">50/50</span></div>
+  <div class="msb-item"><span class="msb-label">灵石</span><span class="msb-value gold" id="msb-gold">0</span></div>
+</div>
+
+<!-- 移动端侧边抽屉 -->
+<div id="mobile-drawer-overlay" onclick="toggleMobilePanel()"></div>
+<div id="mobile-drawer">
+  <div class="drawer-handle" onclick="toggleMobilePanel()"></div>
+  <div class="panel-header"><span class="panel-icon">📜</span> 蛊师卷宗</div>
+  <div id="mobile-stats"></div>
+  <div class="panel-header sub"><span class="panel-icon">🐛</span> 空窍蛊虫</div>
+  <div id="mobile-gu-list"></div>
+  <div class="panel-header sub"><span class="panel-icon">🏆</span> 成就</div>
+  <div id="mobile-achi-list"></div>
+</div>
+
+<!-- 模态框 -->
+<div id="modal-overlay"><div id="modal-box"></div></div>
+
+<script src="js/data.js"></script>
+<script src="js/story.js"></script>
+<script src="js/save.js"></script>
+<script src="js/renderer.js"></script>
+<script src="js/combat.js"></script>
+<script src="js/inventory.js"></script>
+<script src="js/fusion.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
