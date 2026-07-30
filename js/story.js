@@ -13,7 +13,32 @@ const STORY = {
       {text:'✨ 接受月光蛊，开始修炼',next:'receiveMoonlight',reward:{gu:'月光蛊'}},
       {text:'🙏 谦逊推辞，请求自行寻找蛊虫',next:'refuseGu'},
     ],
-    onEnter(){player.storyFlags.openedAperture=true;player.storyFlags.apertureQuality='五成';addLog('system','空窍开辟！容量：5')},
+    onEnter:function(){player.storyFlags.openedAperture=true;player.storyFlags.apertureQuality='五成';addLog('system','空窍开辟！容量：5')},
+  },
+  // ★ 新增：资质鉴定与家老争夺剧情
+  'aptitudeTest':{
+    text:'<span class="narrate">开窍大典还有一个重要环节——资质鉴定。族长取出一枚"测资蛊"，依次为每位开窍成功的少年检测资质。</span>\n\n测资蛊散发出不同的光芒：丁等微弱如萤火，丙等明亮如烛光，乙等灿烂如星辉，<span class="highlight">甲等则璀璨如皓月</span>。\n\n<span class="system">测资蛊停在你面前时，绽放出耀眼的月白色光芒！</span>\n\n<span class="highlight">甲等资质！</span>\n\n<span class="narrate">族长和诸位家老齐齐变色。古月一族已有三年未出甲等资质的天才了！</span>\n\n<span class="system">一时间，几位家老纷纷起身，争相要将你收入自己的支脉。尤其是方之一脉的家老，更是激动不已——你本就是他们最后的血脉。</span>',
+    choices:[
+      {text:'👑 选择加入最强的家老支脉（获得额外资源）',next:'joinMainBranch',reward:{gu:'力蛊'}},
+      {text:'🏠 坚守方之一脉（孝心，获得特殊加成）',next:'stayFangBranch',reward:{gu:'青茅蛊'}},
+      {text:'🤝 保持中立，不参与家老之争',next:'neutralBranch'},
+    ],
+    onEnter:function(){player.aptitude='甲等';addLog('system','资质鉴定：甲等！震惊全族');player.storyFlags.aptitudeTested=true},
+  },
+  'joinMainBranch':{
+    text:'<span class="narrate">你选择了加入资源最丰富的家主嫡脉。家老们虽有不满，但也只能接受。族长亲自赐予你一只珍贵的"力蛊"，作为加入嫡脉的见面礼。</span>\n\n<span class="loot">获得力蛊！</span>\n\n<span class="system">嫡脉资源丰厚，你的修炼之路将更加顺畅。但方之一脉的老人们眼中难掩失落。</span>',
+    choices:[{text:'✨ 接受馈赠，开始修炼',next:'receiveMoonlight',reward:{gu:'力蛊'}}],
+    onEnter:function(){player.branch='家主嫡脉';player.apertureSize+=1;addLog('system','加入家主嫡脉，空窍容量+1')},
+  },
+  'stayFangBranch':{
+    text:'<span class="narrate">你坚定地站在了方之一脉这一边。方脉家老热泪盈眶："好孩子！方之一脉虽然凋零，但有你在，定能重振！"</span>\n\n<span class="system">方脉家老将自己珍藏多年的一只"青茅蛊"交给了你。这只蛊虫虽不起眼，却是方家先祖传下来的。家老说，青茅蛊中蕴含着方家祖辈的精神烙印。</span>\n\n<span class="loot">获得青茅蛊！方之一脉的传承之力加持——空窍容量+2！</span>',
+    choices:[{text:'🙏 郑重收下先祖遗物',next:'receiveMoonlight',reward:{gu:'青茅蛊'}}],
+    onEnter:function(){player.branch='方之一脉';player.apertureSize+=2;addLog('system','坚守方之一脉，祖辈庇佑！空窍容量+2')},
+  },
+  'neutralBranch':{
+    text:'<span class="narrate">你婉拒了所有家老的邀请，选择以个人身份在家族中发展。这个举动让众家老意外，但也无话可说。族长笑道："有志气！那就靠自己的力量去闯吧。"</span>\n\n<span class="system">虽然没有得到额外资源，但你的独立态度赢得了一些族人的尊重。</span>',
+    choices:[{text:'✨ 自力更生，开始修炼',next:'receiveMoonlight'}],
+    onEnter:function(){player.branch='独立蛊师';addLog('system','选择独立，获得自由发展空间')},
   },
   'observeFirst':{
     text:'<span class="narrate">你选择暂退一步，观察他人。几名少年先后上前。</span>\n\n古月赤虎——开辟失败，黯然退下。\n古月兰——成功开辟，三成空窍。\n古月铁——开辟失败。\n\n<span class="system">你注意到，那些内心平静、气息沉稳的人成功率更高。这个发现让你多了一分把握。</span>\n\n终于轮到了你。',
@@ -140,14 +165,83 @@ const STORY = {
   'gotThunder':{text:'<span class="highlight">获得三转蛊虫——雷击蛊！</span>\n\n<span class="narrate">雷击蛊威力强大，是你目前最强的攻击蛊虫。</span>',choices:[{text:'📖 阅读修炼笔记',next:'readNotes'},{text:'🏠 返回山寨',next:'villageHub'},]},
   'readNotes':{text:'<span class="narrate">笔记中记载了这位蛊师的修炼心得，以及关于"蛊虫融合"的秘法。</span>\n\n<span class="system">你学会了蛊虫融合的基础方法！现在可以在山寨中进行蛊虫融合了。</span>',choices:[{text:'🏠 带着收获返回山寨',next:'villageHub'},],onEnter(){player.storyFlags.canFuse=true;addLog('system','学会蛊虫融合！')}},
   'peakScout':{text:'<span class="narrate">站在山顶眺望，你发现远处有一处被迷雾笼罩的山谷。那里应该就是传说中的"迷雾福地"——一处未被开发的福地！</span>\n\n<span class="system">福地中蕴含着大量天材地宝和稀有蛊虫。但同时也危险重重。</span>',choices:[{text:'🌫️ 前往迷雾福地探险',next:'mistBlessedLand'},{text:'🧘 先在山顶修炼',next:'cultivateAtPeak'},{text:'🏠 记下位置，先回山寨准备',next:'villageHub'},],onEnter(){player.storyFlags.discoveredBlessedLand=true;addLog('system','发现迷雾福地！')}},
+  // ★ 新增：白凝冰初遇 + 白家寨
+  'baiJiaZhai':{
+    text:'<span class="narrate">白家寨——与古月山寨齐名的另一大山寨。两寨之间既有贸易往来，也有明争暗斗。</span>\n\n<span class="system">你来到白家寨的坊市，这里的规模比古月山寨的商铺大得多。三三两两的蛊师穿梭其中。</span>\n\n<span class="highlight">忽然，一道凌厉的剑光从前方传来！</span>\n\n<span class="narrate">只见一个白衣少年正在演武场上演练杀招。剑光如雪，寒气四溢。此人正是白家寨的天才——白凝冰。</span>\n\n<span class="system">白凝冰已经达到三转蛊师的修为，在年轻一辈中独领风骚。他用的是剑光蛊，杀招"剑光分化"令人叹为观止。</span>',
+    choices:[
+      {text:'⚔️ 上前切磋（挑战白凝冰）',next:null,combat:{name:'白凝冰',hp:150,atk:30,def:12,reward:'both',rewardGold:100,rewardGu:'剑光蛊',onWin:'defeatedBaiNingBing'}},
+      {text:'💬 请教剑光蛊的修炼心得',next:'learnFromBai'},
+      {text:'🏪 逛白家寨坊市',next:'baiJiaMarket'},
+      {text:'🏠 返回古月山寨',next:'villageHub'},
+    ],
+    onEnter:function(){player.storyFlags.metBaiNingBing=true;addLog('system','来到白家寨，遇到了天才白凝冰')},
+  },
+  'defeatedBaiNingBing':{
+    text:'<span class="highlight">你竟然战胜了白凝冰！</span>\n\n<span class="narrate">白凝冰擦去嘴角的血迹，眼中闪过一丝惊异："有意思...古月山寨还有这样的对手。你叫什么名字？"</span>\n\n<span class="system">他记住了你的名字。虽然输了，但白凝冰非但没有恼怒，反而露出了一丝欣赏的神色。</span>\n\n<span class="loot">获得剑光蛊（二转）！+100灵石！</span>',
+    choices:[
+      {text:'🤝 结交白凝冰（获得友谊）',next:'befriendBai'},
+      {text:'😤 保持敌对态度',next:'villageHub'},
+    ],
+    onEnter:function(){addLog('loot','击败白凝冰！剑光蛊+100灵石');player.storyFlags.defeatedBai=true;if(player.achievements.indexOf('击败白凝冰')<0)player.achievements.push('击败白凝冰');updateUI()},
+  },
+  'befriendBai':{
+    text:'<span class="narrate">白凝冰微微一笑："古月方源...我记住你了。希望下次见面时，你能更强。"</span>\n\n<span class="system">你获得了白凝冰的认可。他告诉你，白家寨附近有一处秘地，可能有"炼神蛊"出没。</span>\n\n<span class="loot">获得情报：白家寨秘地</span>',
+    choices:[
+      {text:'🔍 前往白家寨秘地寻宝',next:'baiJiaSecret'},
+      {text:'🏠 返回古月山寨',next:'villageHub'},
+    ],
+    onEnter:function(){player.storyFlags.befriendedBai=true;addLog('system','与白凝冰建立了友谊')},
+  },
+  'learnFromBai':{
+text:'<span class="narrate">你虚心向白凝冰请教。他虽然性情冷淡，但见你态度诚恳，还是指点了几句。</span>\n\n<span class="system">"剑光蛊虽只是二转，但配合杀招\u2018剑光分化\u2019，威力不逊于三转攻击蛊。关键在于真元运转的时机..."</span>\n\n<span class="cultivation">你隐约领悟到了剑光分化的一丝奥妙。攻击力+5！</span>',
+    choices:[
+      {text:'🙏 感谢指点，离开白家寨',next:'villageHub'},
+      {text:'🏪 顺路逛白家寨坊市',next:'baiJiaMarket'},
+    ],
+    onEnter:function(){player.atk+=5;addLog('system','受白凝冰指点，攻击力+5');updateUI()},
+  },
+  'baiJiaMarket':{
+    text:'<span class="narrate">白家寨的坊市比古月山寨的商铺热闹得多。各种蛊虫、材料、装备琳琅满目。</span>\n\n<span class="system">你在这里发现了古月山寨没有的稀有物品。</span>',
+    choices:[
+      {text:'🛒 购买酒虫 - 40灵石（真元恢复）',next:null,buy:{item:'酒虫',price:40}},
+      {text:'🛒 购买剑光蛊 - 80灵石（二转攻击）',next:null,buy:{item:'剑光蛊',price:80}},
+      {text:'🛒 购买炼神蛊 - 120灵石（空窍+1）',next:null,buy:{item:'炼神蛊',price:120}},
+      {text:'👈 离开坊市',next:'baiJiaZhai'},
+    ]
+  },
+  'baiJiaSecret':{
+    text:'<span class="narrate">你来到白家寨后山的一处隐秘洞穴。这里据说曾有炼神蛊出没。</span>\n\n<span class="danger">洞穴深处传来低沉的震动声！一只巨大的岩甲兽守护着一枚闪闪发光的蛊虫！</span>',
+    choices:[
+      {text:'⚔️ 击败岩甲兽，夺取炼神蛊',next:null,combat:{name:'岩甲兽',hp:100,atk:22,def:15,reward:'gu',rewardGu:'炼神蛊',onWin:'gotRefineGu'}},
+      {text:'🤫 悄悄绕过去偷取',next:'stealRefineGu'},
+      {text:'🏠 安全起见，先回去',next:'villageHub'},
+    ]
+  },
+  'gotRefineGu':{
+    text:'<span class="highlight">获得炼神蛊（二转）！</span>\n\n<span class="narrate">这只蛊虫散发着柔和的精神波动。使用后可以淬炼精神，永久扩展空窍容量。</span>',
+    choices:[
+      {text:'🧠 立即使用炼神蛊',next:'useRefineGu',reward:{gu:'炼神蛊'}},
+      {text:'🎒 先收起来，回山寨再说',next:'villageHub'},
+    ]
+  },
+  'useRefineGu':{
+    text:'<span class="narrate">你将炼神蛊纳入空窍。一股清凉的精神力涌入，你的空窍在轻微的震动中扩张了。</span>\n\n<span class="cultivation">空窍容量永久+1！</span>',
+    choices:[{text:'🏠 满载而归，返回山寨',next:'villageHub'}],
+    onEnter:function(){player.apertureSize+=1;addLog('cultivation','使用炼神蛊，空窍容量+1！');updateUI()},
+  },
+  'stealRefineGu':{
+    text:'<span class="narrate">你屏息凝神，悄悄靠近。就在手指即将碰到炼神蛊时——</span>\n\n<span class="danger">岩甲兽猛然惊醒！</span>',
+    choices:[{text:'⚔️ 正面迎战！',next:null,combat:{name:'岩甲兽',hp:100,atk:22,def:15,reward:'gu',rewardGu:'炼神蛊',onWin:'gotRefineGu'}}],
+  },
   'villageHub':{
     text:'<span class="narrate">古月山寨——你的家园。这里的族人都认识你，山寨虽小但五脏俱全。</span>\n\n你可以：\n• 去<span class="highlight">商铺</span>购买蛊虫和装备\n• 去<span class="highlight">融合室</span>融合蛊虫\n• 去<span class="highlight">藏经阁</span>学习知识\n• 去<span class="highlight">任务堂</span>接取任务\n• 或再次前往翠微山和福地',
     choices:[
       {text:'🏪 前往商铺',next:'shop'},
-      {text:'🔥 前往融合室',next:'fusionRoom',condition:()=>player.storyFlags.canFuse},
+      {text:'🔥 前往融合室',next:'fusionRoom',condition:function(){return player.storyFlags.canFuse}},
       {text:'📋 前往任务堂',next:'questHall'},
       {text:'🏔️ 前往翠微山',next:'cuishanMountain'},
-      {text:'🌫️ 前往迷雾福地',next:'mistBlessedLand',condition:()=>player.storyFlags.discoveredBlessedLand},
+      {text:'🌫️ 前往迷雾福地',next:'mistBlessedLand',condition:function(){return player.storyFlags.discoveredBlessedLand}},
+      {text:'🏘️ 前往白家寨',next:'baiJiaZhai'},
       {text:'📚 再去藏经阁',next:'library2'},
     ]
   },
