@@ -1,7 +1,14 @@
 // ==================== UI 系统 ====================
 function updateUI(){
-  // 先构建状态元素
-  buildPlayerStats();
+  // 桌面端状态（直接更新HTML中已有的元素，不重建）
+  document.getElementById('stat-name').textContent=player.name;
+  document.getElementById('stat-rank').textContent=RANK_NAMES[player.rank]+'·'+RANK_SUB[player.rankSub];
+  document.getElementById('stat-hp').textContent=player.hp+'/'+player.maxHp;
+  document.getElementById('stat-essence').textContent=player.essence+'/'+player.maxEssence;
+  document.getElementById('stat-gold').textContent=player.gold;
+  document.getElementById('stat-atk').textContent=player.atk;
+  document.getElementById('stat-def').textContent=player.def;
+  document.getElementById('stat-aperture').textContent=player.apertureSlots.length+'/'+player.apertureSize;
   // 移动端底部状态条
   document.getElementById('msb-rank').textContent=RANK_NAMES[player.rank]+'·'+RANK_SUB[player.rankSub];
   document.getElementById('msb-hp').textContent=player.hp+'/'+player.maxHp;
@@ -28,28 +35,15 @@ function updateUI(){
     span.className='achievement-badge';span.textContent=a;
     achList.appendChild(span);
   });
-}
-function buildPlayerStats(){
-  const container=document.getElementById('player-stats');
-  container.innerHTML=
-    '<div class="stat-row"><span class="stat-label">姓名</span><span class="stat-value">'+player.name+'</span></div>'+
-    '<div class="stat-row"><span class="stat-label">修为</span><span class="stat-value rank" id="stat-rank">'+RANK_NAMES[player.rank]+'·'+RANK_SUB[player.rankSub]+'</span></div>'+
-    '<div class="stat-row"><span class="stat-label">生命</span><span class="stat-value health" id="stat-hp">'+player.hp+'/'+player.maxHp+'</span></div>'+
-    '<div class="stat-row"><span class="stat-label">真元</span><span class="stat-value essence" id="stat-essence">'+player.essence+'/'+player.maxEssence+'</span></div>'+
-    '<div class="stat-row"><span class="stat-label">灵石</span><span class="stat-value gold" id="stat-gold">'+player.gold+'</span></div>'+
-    '<div class="stat-row"><span class="stat-label">攻击</span><span class="stat-value" id="stat-atk">'+player.atk+'</span></div>'+
-    '<div class="stat-row"><span class="stat-label">防御</span><span class="stat-value" id="stat-def">'+player.def+'</span></div>'+
-    '<div class="stat-row"><span class="stat-label">空窍容量</span><span class="stat-value" id="stat-aperture">'+player.apertureSlots.length+'/'+player.apertureSize+'</span></div>';
   // 移动端同步
-  document.getElementById('mobile-stats').innerHTML=
-    '<div class="stat-row"><span class="stat-label">姓名</span><span class="stat-value">'+player.name+'</span></div>'+
-    '<div class="stat-row"><span class="stat-label">修为</span><span class="stat-value rank">'+RANK_NAMES[player.rank]+'·'+RANK_SUB[player.rankSub]+'</span></div>'+
-    '<div class="stat-row"><span class="stat-label">生命</span><span class="stat-value health">'+player.hp+'/'+player.maxHp+'</span></div>'+
-    '<div class="stat-row"><span class="stat-label">真元</span><span class="stat-value essence">'+player.essence+'/'+player.maxEssence+'</span></div>'+
-    '<div class="stat-row"><span class="stat-label">灵石</span><span class="stat-value gold">'+player.gold+'</span></div>'+
-    '<div class="stat-row"><span class="stat-label">攻击</span><span class="stat-value">'+player.atk+'</span></div>'+
-    '<div class="stat-row"><span class="stat-label">防御</span><span class="stat-value">'+player.def+'</span></div>'+
-    '<div class="stat-row"><span class="stat-label">空窍容量</span><span class="stat-value">'+player.apertureSlots.length+'/'+player.apertureSize+'</span></div>';
+  const ms=document.getElementById('mobile-stats');
+  ms.innerHTML='';
+  ['姓名|'+player.name,'修为|'+RANK_NAMES[player.rank]+'·'+RANK_SUB[player.rankSub],'生命|'+player.hp+'/'+player.maxHp,'真元|'+player.essence+'/'+player.maxEssence,'灵石|'+player.gold,'攻击|'+player.atk,'防御|'+player.def,'空窍容量|'+player.apertureSlots.length+'/'+player.apertureSize].forEach(row=>{
+    const parts=row.split('|');
+    const div=document.createElement('div');div.className='stat-row';
+    div.innerHTML='<span class="stat-label">'+parts[0]+'</span><span class="stat-value">'+parts[1]+'</span>';
+    ms.appendChild(div);
+  });
   const mgl=document.getElementById('mobile-gu-list');mgl.innerHTML='';
   player.apertureSlots.forEach((gu,i)=>{if(!gu)return;const div=document.createElement('div');div.className='inv-item gu-rank'+gu.rank;div.innerHTML='🐛 <span class="gu-name">'+gu.name+'</span> '+RANK_NAMES[gu.rank];div.onclick=()=>{unequipGu(i)};mgl.appendChild(div);});
   const mal=document.getElementById('mobile-achi-list');mal.innerHTML='';

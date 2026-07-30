@@ -4,7 +4,6 @@ function init(){
     if(e.target===this)closeModal();
   });
   addGuToInventory('月光蛊');
-  buildPlayerStats();
   updateUI();
   renderNode('start');
 }
