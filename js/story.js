@@ -1,14 +1,13 @@
 const STORY = {
   'start':{
-    text:'<span class="narrate">天空阴沉，古月山寨笼罩在薄雾之中。\n\n你——古月方源，古月山寨的一名普通少年，今日正是你参加"开窍大典"的日子。成功开窍，便能踏上蛊师之路；失败，则终生为凡。</span>\n\n<span class="system">族长古月博的声音在山寨广场上回荡："今日，是我古月山寨一年一度的开窍大典！凡年满十五岁的少年，皆可上前一试！"</span>\n\n你站在人群中，心跳如鼓。前方，那枚散发着幽光的"启灵蛊"正等待着你的触碰。',
+    text:'<span class="narrate">天空阴沉，古月山寨笼罩在薄雾之中。\n\n你——<span class="highlight">'+player.name+'</span>，古月山寨的一名普通少年，今日正是你参加"开窍大典"的日子。成功开窍，便能踏上蛊师之路；失败，则终生为凡。</span>\n\n<span class="system">族长古月博的声音在山寨广场上回荡："今日，是我古月山寨一年一度的开窍大典！凡年满十五岁的少年，皆可上前一试！"</span>\n\n<span class="narrate">启灵蛊悬浮在祠堂中央，散发着幽蓝色的光芒。家族的长辈们站在周围，目光中满是期盼。</span>\n\n轮到你了。你深吸一口气，缓步上前。',
     choices:[
-      {text:'🎯 勇敢上前，触碰启灵蛊',next:'openAperture'},
+      {text:'🎯 伸出手，触碰启灵蛊',next:'openAperture'},
       {text:'🤔 先观察其他人开窍的结果',next:'observeFirst'},
-      {text:'💪 暗自运转体内气血，尝试自行冲窍',next:'selfOpen'},
     ]
   },
   'openAperture':{
-    text:'<span class="narrate">你深吸一口气，迈步上前。手掌触碰到启灵蛊的瞬间，一股暖流涌入体内！</span>\n\n<span class="highlight">嗡——！</span>\n\n你的体内仿佛打开了一扇门！空窍——开辟成功！\n\n<span class="system">启灵蛊的光芒包裹着你，你感觉到自己的空窍中涌动着真元。古月博族长赞许地点头："很好，方源，你的空窍资质不错，有五成空窍！"</span>\n\n<span class="loot">🎉 你正式成为一名蛊师！修为：一转·初阶</span>\n\n<span class="system">族长赐予了你一只入门蛊虫——月光蛊。</span>',
+    text:'<span class="narrate">你深吸一口气，迈步上前。手掌触碰到启灵蛊的瞬间，一股暖流涌入体内！</span>\n\n<span class="highlight">嗡——！</span>\n\n你的体内仿佛打开了一扇门！空窍——开辟成功！\n\n<span class="system">启灵蛊的光芒包裹着你，你感觉到自己的空窍中涌动着真元。古月博族长赞许地点头："很好，'+player.name+'，你的空窍资质不错，有五成空窍！"</span>\n\n<span class="loot">🎉 你正式成为一名蛊师！修为：一转·初阶</span>\n\n<span class="system">按照惯例，族长赐予你一只入门蛊虫——月光蛊。这是古月一族最常见的起步蛊虫，专门给新晋蛊师熟悉蛊虫喂养之用。</span>',
     choices:[
       {text:'✨ 接受月光蛊，开始修炼',next:'receiveMoonlight',reward:{gu:'月光蛊'}},
       {text:'🙏 谦逊推辞，请求自行寻找蛊虫',next:'refuseGu'},
@@ -52,17 +51,17 @@ const STORY = {
   'receiveMoonlight':{
     text:'<span class="narrate">你将月光蛊收入空窍。这只蛊虫通体银白，散发着柔和的月光。从今日起，你便是一名真正的蛊师了。</span>\n\n<span class="system">接下来，你需要选择自己的修炼方向。古月山寨周围危机四伏，但也充满机遇。</span>',
     choices:[
-      {text:'🏔️ 前往山寨外的翠微山历练',next:'cuishanMountain'},
+      {text:'🏔️ 前往青茅山历练',next:'cuishanMountain'},
       {text:'📚 去藏经阁学习蛊师基础知识',next:'library'},
       {text:'🤝 与其他少年蛊师交流切磋',next:'sparWithPeers'},
       {text:'🕵️ 探索山寨中的秘密',next:'villageSecret'},
     ]
   },
   'selfOpenReward':{
-    text:'<span class="narrate">你获得了月光蛊和铁骨蛊。虽然身体虚弱，但双蛊在手，空窍广阔，前途不可限量。</span>\n\n<span class="system">古月博族长私下找到你："方源，你的天赋非同寻常。我有一事相托..."</span>',
+    text:'<span class="narrate">你获得了月光蛊和铁骨蛊。虽然身体虚弱，但双蛊在手，空窍广阔，前途不可限量。</span>\n\n<span class="system">古月博族长私下找到你："'+player.name+'，你的天赋非同寻常。我有一事相托..."</span>',
     choices:[
       {text:'👂 认真倾听族长的委托',next:'chiefQuest'},
-      {text:'🏔️ 先养好伤，独自去翠微山历练',next:'cuishanMountain'},
+      {text:'🏔️ 先养好伤，独自去青茅山历练',next:'cuishanMountain'},
     ]
   },
   'refuseGu':{
@@ -99,22 +98,22 @@ const STORY = {
     ]
   },
   'chiefQuest':{
-    text:'<span class="narrate">族长的表情严肃："近来翠微山中出现了一只狂暴的石魔，已经伤了好几个采药的族人。我需要你去调查此事。作为回报，我会赐予你一件装备。"</span>\n\n<span class="system">这是你的第一个任务！</span>',
+    text:'<span class="narrate">族长的表情严肃："近来青茅山中出现了一只狂暴的山猪，已经伤了好几个采药的族人。我需要你去调查此事。作为回报，我会赐予你一件装备。"</span>\n\n<span class="system">这是你的第一个任务！</span>',
     choices:[
-      {text:'✅ 接受任务——前往翠微山调查石魔',next:'cuishanMountain',setFlag:'chiefQuestAccepted'},
+      {text:'✅ 接受任务——前往青茅山调查山猪',next:'cuishanMountain',setFlag:'chiefQuestAccepted'},
       {text:'🕵️ 先做好万全准备再出发',next:'prepareForQuest'},
     ]
   },
   'prepareForQuest':{
-    text:'<span class="narrate">你花时间调整状态，将月光蛊和铁骨蛊的真元补满。准备好了再出发。</span>\n\n<span class="system">（生命和真元已恢复满）</span>',
-    choices:[{text:'🏔️ 准备就绪，前往翠微山',next:'cuishanMountain'},],
+    text:'<span class="narrate">你花时间调整状态。准备好了再出发。</span>\n\n<span class="system">（生命和真元已恢复满）</span>',
+    choices:[{text:'🏔️ 准备就绪，前往青茅山',next:'cuishanMountain'},],
     onEnter(){player.hp=player.maxHp;player.essence=player.maxEssence;updateUI()},
   },
   'cuishanMountain':{
-    text:'<span class="narrate">翠微山，古月山寨外最大的山脉。山中妖兽横行，但也孕育着无数天材地宝。蛊虫在这里自然生长，是蛊师们历练的天堂——也是地狱。</span>\n\n山脚下，你看到三条道路：\n• <span class="highlight">东边</span>通往密林深处，据说有珍稀蛊虫出没\n• <span class="highlight">西边</span>通往一处废弃矿场，有石魔活动的痕迹\n• <span class="highlight">北边</span>通往山顶，灵气最为充沛',
+    text:'<span class="narrate">青茅山，古月山寨坐落的山脉。虽然不算雄奇，但山林密布，妖兽出没。蛊虫在山野间自然生长，是年轻蛊师们最好的历练场所。</span>\n\n山脚下，你看到三条道路：\n• <span class="highlight">东边</span>通往密林深处，据说有野生蛊虫出没\n• <span class="highlight">西边</span>通往一处废弃矿场，偶尔有野猪出没\n• <span class="highlight">北边</span>通往山顶，灵气最为充沛',
     choices:[
       {text:'🌲 向东——深入密林寻找蛊虫',next:'forestEast'},
-      {text:'⛏️ 向西——前往废弃矿场（石魔任务）',next:'mineWest'},
+      {text:'⛏️ 向西——前往废弃矿场探索',next:'mineWest'},
       {text:'⛰️ 向北——攀登山顶吸收灵气',next:'mountainTop'},
       {text:'🏠 返回山寨休整',next:'villageHub'},
     ]
@@ -128,15 +127,15 @@ const STORY = {
   'mineDeep2':{text:'<span class="narrate">矿洞最深处，你发现了一具古老的骸骨。骸骨手中紧握着一本残破的典籍...</span>\n\n<span class="loot">获得《杀招残卷》！记载了"月光斩"的修炼方法！</span>',choices:[{text:'📖 学习杀招——月光斩',next:'learnMoonSlash'},{text:'💰 带着典籍返回山寨',next:'villageHub'},],onEnter(){player.storyFlags.foundKillerMoveScroll=true;addLog('loot','发现杀招残卷！')}},
   'learnMoonSlash':{text:'<span class="narrate">你按照残卷上的记载运转真元。月光蛊在空窍中光芒大放！</span>\n\n<span class="highlight">习得仙道杀招——「月光斩」！</span>\n\n<span class="system">月光斩：需要月光蛊，攻击力×2.5倍，消耗15真元</span>',choices:[{text:'🏠 满载而归，返回山寨',next:'villageHub'},],onEnter(){if(!player.killerMoves.includes('月光斩'))player.killerMoves.push('月光斩');addLog('cultivation','习得杀招：月光斩！');}},
   'mineWest':{
-    text:'<span class="narrate">废弃矿场中到处是碎石和废弃的矿车。地面有巨大的脚印——石魔就在附近。</span>\n\n<span class="danger">前方传来沉重的脚步声！一只高达三米的石魔正朝你走来！</span>',
+    text:'<span class="narrate">废弃矿场中到处是碎石和废弃的矿车。地面有巨大的脚印——一只庞大的山猪正在觅食。</span>\n\n<span class="danger">山猪发现了你！它低吼着，獠牙在阳光下闪着寒光！</span>',
     choices:[
-      {text:'⚔️ 正面迎战石魔！',next:null,combat:{name:'石魔',hp:80,atk:15,def:8,reward:'both',rewardGold:50,rewardGu:'石皮蛊',onWin:'defeatedStoneDemon'}},
-      {text:'🏃 石魔太强了，暂时撤退',next:'cuishanMountain'},
-      {text:'🧠 用计谋引诱石魔落入陷阱',next:'trapStoneDemon'},
+      {text:'⚔️ 正面迎战山猪！',next:null,combat:{name:'狂暴山猪',hp:60,atk:14,def:6,reward:'both',rewardGold:40,rewardGu:'石皮蛊',onWin:'defeatedBoar'}},
+      {text:'🏃 山猪太强了，先撤退',next:'cuishanMountain'},
+      {text:'🧠 用矿车设置陷阱捕捉',next:'trapBoar'},
     ]
   },
-  'defeatedStoneDemon':{text:'<span class="highlight">石魔轰然倒地！</span>\n\n<span class="narrate">你击败了石魔，从它的核心中取得了一只"石皮蛊"。这是非常实用的防御蛊虫。</span>\n\n<span class="loot">🎉 获得石皮蛊！+50灵石！</span>',choices:[{text:'🏠 回山寨向族长报告',next:'reportToChief'},{text:'⛰️ 继续在翠微山探索',next:'cuishanMountain'},],onEnter(){player.storyFlags.defeatedStoneDemon=true;addLog('loot','击败石魔！获得石皮蛊+50灵石');updateUI()}},
-  'trapStoneDemon':{text:'<span class="narrate">你利用矿场中的废弃矿车和绳索设置了一个陷阱。石魔笨拙地踩入陷阱，被绳索绊倒！</span>\n\n<span class="system">石魔暂时失去了平衡，防御力大幅下降！</span>',choices:[{text:'⚔️ 趁机攻击！',next:null,combat:{name:'石魔（失衡）',hp:80,atk:15,def:2,reward:'both',rewardGold:50,rewardGu:'石皮蛊',onWin:'defeatedStoneDemon'}},]},
+  'defeatedBoar':{text:'<span class="highlight">山猪轰然倒地！</span>\n\n<span class="narrate">你击败了山猪。在它的巢穴里，你意外发现了一只"石皮蛊"——这是被山猪吞食后侥幸保存下来的。</span>\n\n<span class="loot">🎉 获得石皮蛊！+40灵石！</span>',choices:[{text:'🏠 回山寨向族长报告',next:'reportToChief'},{text:'⛰️ 继续在青茅山探索',next:'cuishanMountain'},],onEnter(){player.storyFlags.defeatedBoar=true;addLog('loot','击败山猪！石皮蛊+40灵石');updateUI()}},
+  'trapBoar':{text:'<span class="narrate">你利用矿场中的废弃矿车和绳索设置了一个陷阱。山猪笨拙地踩入陷阱，被绳索绊倒！</span>\n\n<span class="system">山猪暂时失去了平衡，防御力大幅下降！</span>',choices:[{text:'⚔️ 趁机攻击！',next:null,combat:{name:'山猪（失衡）',hp:60,atk:14,def:2,reward:'both',rewardGold:40,rewardGu:'石皮蛊',onWin:'defeatedBoar'}},]},
   'forestEast':{text:'<span class="narrate">密林中古木参天，阳光透过树叶洒下斑驳的光影。空气中弥漫着浓郁的灵气。</span>\n\n<span class="system">你发现树上有一只散发着红光的蛊虫——火球蛊！但旁边还有一只守护的妖兽。</span>',choices:[{text:'⚔️ 击败守护妖兽，夺取火球蛊',next:null,combat:{name:'焰尾貂',hp:50,atk:14,def:3,reward:'gu',rewardGu:'火球蛊',onWin:'gotFireball'}},{text:'🤫 悄悄靠近，尝试偷取',next:'stealFireball'},{text:'🌲 继续深入密林',next:'forestDeep'},]},
   'gotFireball':{text:'<span class="highlight">获得火球蛊！</span>\n\n<span class="narrate">火球蛊通体赤红，散发着灼热的气息。这是一只二转攻击型蛊虫，威力不俗。</span>',choices:[{text:'🌲 继续深入密林',next:'forestDeep'},{text:'🏠 返回山寨',next:'villageHub'},]},
   'stealFireball':{text:'<span class="narrate">你屏住呼吸，轻手轻脚地靠近。就在你即将得手时——焰尾貂突然惊醒！</span>',choices:[{text:'⚔️ 正面战斗！',next:null,combat:{name:'焰尾貂',hp:50,atk:14,def:3,reward:'gu',rewardGu:'火球蛊',onWin:'gotFireball'}},]},
@@ -167,25 +166,25 @@ const STORY = {
   'peakScout':{text:'<span class="narrate">站在山顶眺望，你发现远处有一处被迷雾笼罩的山谷。那里应该就是传说中的"迷雾福地"——一处未被开发的福地！</span>\n\n<span class="system">福地中蕴含着大量天材地宝和稀有蛊虫。但同时也危险重重。</span>',choices:[{text:'🌫️ 前往迷雾福地探险',next:'mistBlessedLand'},{text:'🧘 先在山顶修炼',next:'cultivateAtPeak'},{text:'🏠 记下位置，先回山寨准备',next:'villageHub'},],onEnter(){player.storyFlags.discoveredBlessedLand=true;addLog('system','发现迷雾福地！')}},
   // ★ 新增：白凝冰初遇 + 白家寨
   'baiJiaZhai':{
-    text:'<span class="narrate">白家寨——与古月山寨齐名的另一大山寨。两寨之间既有贸易往来，也有明争暗斗。</span>\n\n<span class="system">你来到白家寨的坊市，这里的规模比古月山寨的商铺大得多。三三两两的蛊师穿梭其中。</span>\n\n<span class="highlight">忽然，一道凌厉的剑光从前方传来！</span>\n\n<span class="narrate">只见一个白衣少年正在演武场上演练杀招。剑光如雪，寒气四溢。此人正是白家寨的天才——白凝冰。</span>\n\n<span class="system">白凝冰已经达到三转蛊师的修为，在年轻一辈中独领风骚。他用的是剑光蛊，杀招"剑光分化"令人叹为观止。</span>',
+    text:'<span class="narrate">白家寨——与古月山寨齐名的另一大山寨。两寨之间既有贸易往来，也有明争暗斗。</span>\n\n<span class="system">你来到白家寨的坊市，这里的规模比古月山寨的商铺大得多。三三两两的蛊师穿梭其中。</span>\n\n<span class="highlight">前方传来一阵寒气，地面凝结出白色的霜花！</span>\n\n<span class="narrate">只见一个白衣少年正在演武场上催动冰晶蛊。寒雾缭绕，冰屑纷飞。此人正是白家寨的天才——白凝冰。他主修冰道，年仅十六就已达到三转蛊师修为。</span>\n\n<span class="system">白凝冰的资质极端出色，短短两年就从凡人修炼到三转。在年轻一辈中独领风骚，连老一辈都感到压力。他用的是冰晶蛊，一手冰道杀招凌厉无比。</span>',
     choices:[
-      {text:'⚔️ 上前切磋（挑战白凝冰）',next:null,combat:{name:'白凝冰',hp:150,atk:30,def:12,reward:'both',rewardGold:100,rewardGu:'剑光蛊',onWin:'defeatedBaiNingBing'}},
-      {text:'💬 请教剑光蛊的修炼心得',next:'learnFromBai'},
+      {text:'⚔️ 上前切磋（挑战白凝冰）',next:null,combat:{name:'白凝冰',hp:150,atk:30,def:12,reward:'both',rewardGold:100,rewardGu:'冰晶蛊',onWin:'defeatedBaiNingBing'}},
+      {text:'💬 向白凝冰请教冰道修炼',next:'learnFromBai'},
       {text:'🏪 逛白家寨坊市',next:'baiJiaMarket'},
       {text:'🏠 返回古月山寨',next:'villageHub'},
     ],
-    onEnter:function(){player.storyFlags.metBaiNingBing=true;addLog('system','来到白家寨，遇到了天才白凝冰')},
+    onEnter:function(){player.storyFlags.metBaiNingBing=true;addLog('system','来到白家寨，遇到了冰道天才白凝冰')},
   },
   'defeatedBaiNingBing':{
-    text:'<span class="highlight">你竟然战胜了白凝冰！</span>\n\n<span class="narrate">白凝冰擦去嘴角的血迹，眼中闪过一丝惊异："有意思...古月山寨还有这样的对手。你叫什么名字？"</span>\n\n<span class="system">他记住了你的名字。虽然输了，但白凝冰非但没有恼怒，反而露出了一丝欣赏的神色。</span>\n\n<span class="loot">获得剑光蛊（二转）！+100灵石！</span>',
+    text:'<span class="highlight">你竟然战胜了白凝冰！</span>\n\n<span class="narrate">白凝冰擦去嘴角的血迹，眼中闪过一丝惊异："有意思...古月山寨还有这样的对手。你叫什么名字？"</span>\n\n<span class="system">他记住了你的名字。虽然输了，但白凝冰非但没有恼怒，反而露出了一丝欣赏的神色。</span>\n\n<span class="loot">获得冰晶蛊（二转）！+100灵石！</span>',
     choices:[
       {text:'🤝 结交白凝冰（获得友谊）',next:'befriendBai'},
       {text:'😤 保持敌对态度',next:'villageHub'},
     ],
-    onEnter:function(){addLog('loot','击败白凝冰！剑光蛊+100灵石');player.storyFlags.defeatedBai=true;if(player.achievements.indexOf('击败白凝冰')<0)player.achievements.push('击败白凝冰');updateUI()},
+    onEnter:function(){addLog('loot','击败白凝冰！冰晶蛊+100灵石');player.storyFlags.defeatedBai=true;if(player.achievements.indexOf('击败白凝冰')<0)player.achievements.push('击败白凝冰');updateUI()},
   },
   'befriendBai':{
-    text:'<span class="narrate">白凝冰微微一笑："古月方源...我记住你了。希望下次见面时，你能更强。"</span>\n\n<span class="system">你获得了白凝冰的认可。他告诉你，白家寨附近有一处秘地，可能有"炼神蛊"出没。</span>\n\n<span class="loot">获得情报：白家寨秘地</span>',
+    text:'<span class="narrate">白凝冰微微点头："'+player.name+'...我记住你了。希望下次见面时，你能更强。"</span>\n\n<span class="system">你获得了白凝冰的认可。他告诉你，白家寨附近有一处秘地，可能有"炼神蛊"出没。</span>\n\n<span class="loot">获得情报：白家寨秘地</span>',
     choices:[
       {text:'🔍 前往白家寨秘地寻宝',next:'baiJiaSecret'},
       {text:'🏠 返回古月山寨',next:'villageHub'},
@@ -193,12 +192,12 @@ const STORY = {
     onEnter:function(){player.storyFlags.befriendedBai=true;addLog('system','与白凝冰建立了友谊')},
   },
   'learnFromBai':{
-text:'<span class="narrate">你虚心向白凝冰请教。他虽然性情冷淡，但见你态度诚恳，还是指点了几句。</span>\n\n<span class="system">"剑光蛊虽只是二转，但配合杀招\u2018剑光分化\u2019，威力不逊于三转攻击蛊。关键在于真元运转的时机..."</span>\n\n<span class="cultivation">你隐约领悟到了剑光分化的一丝奥妙。攻击力+5！</span>',
+    text:'<span class="narrate">你虚心向白凝冰请教。他虽然性情冷淡，但见你态度诚恳，还是指点了几句。</span>\n\n<span class="system">"冰道修炼，讲究以寒气淬炼真元。冰晶蛊需要持续用真元喂养，品质越高寒气越强。配合冰晶蛊能打出冰裂杀招..."</span>\n\n<span class="cultivation">你隐约领悟到了冰道修炼的一丝奥妙。防御力+5！</span>',
     choices:[
       {text:'🙏 感谢指点，离开白家寨',next:'villageHub'},
       {text:'🏪 顺路逛白家寨坊市',next:'baiJiaMarket'},
     ],
-    onEnter:function(){player.atk+=5;addLog('system','受白凝冰指点，攻击力+5');updateUI()},
+    onEnter:function(){player.def+=5;addLog('system','受白凝冰指点冰道，防御力+5');updateUI()},
   },
   'baiJiaMarket':{
     text:'<span class="narrate">白家寨的坊市比古月山寨的商铺热闹得多。各种蛊虫、材料、装备琳琅满目。</span>\n\n<span class="system">你在这里发现了古月山寨没有的稀有物品。</span>',
