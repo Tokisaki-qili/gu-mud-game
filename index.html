@@ -74,6 +74,8 @@ body{background:#0a0a0a;color:#c8c0a8;font-family:"Microsoft YaHei","SimSun",ser
       <button class="action-btn" onclick="showFusion()">🔥 蛊虫融合</button>
       <button class="action-btn" onclick="showKillerMoves()">✨ 杀招</button>
       <button class="action-btn" onclick="showAchievements()">🏆 成就</button>
+      <button class="action-btn" onclick="saveGame()">💾 存档</button>
+      <button class="action-btn" onclick="loadGame()">📂 读档</button>
       <button class="action-btn" onclick="showHelp()">❓ 帮助</button>
     </div>
     <div id="story-output"></div>
@@ -692,6 +694,10 @@ function renderNode(nodeId){
   out.scrollTop=out.scrollHeight;
   renderChoices(node);
   updateUI();
+  // 自动存档（不在战斗中和起点）
+  if(nodeId!=='start' && !combatState) {
+    autoSave();
+  }
 }
 
 function renderChoices(node){
@@ -1192,6 +1198,164 @@ function showHelp(){
 
 function closeModal(){
   document.getElementById('modal-overlay').classList.remove('active');
+}
+
+// ==================== 存档系统 ====================
+const SAVE_KEY = 'gu_mud_save_v2';
+const AUTO_SAVE_KEY = 'gu_mud_autosave_v2';
+const MAX_SAVES = 5;
+
+function saveGame(slot){
+  if(!slot) slot = 0;
+  const saveData = {
+    version: 2,
+    timestamp: new Date().toLocaleString('zh-CN'),
+    player: {
+      rank: player.rank, rankSub: player.rankSub,
+      hp: player.hp, maxHp: player.maxHp,
+      essence: player.essence, maxEssence: player.maxEssence,
+      atk: player.atk, def: player.def,
+      gold: player.gold,
+      apertureSize: player.apertureSize,
+      apertureSlotNames: player.apertureSlots.map(g=>g?g.name:null).filter(Boolean),
+      inventoryNames: player.inventory.map(g=>g.name),
+      equipment: {...player.equipment},
+      achievements: [...player.achievements],
+      killerMoves: [...player.killerMoves],
+      storyFlags: {...player.storyFlags},
+    },
+    currentNode: currentNode,
+    storyHTML: document.getElementById('story-output').innerHTML,
+  };
+  const key = slot === 0 ? AUTO_SAVE_KEY : (SAVE_KEY + '_' + slot);
+  localStorage.setItem(key, JSON.stringify(saveData));
+  addLog('system', slot === 0 ? '💾 自动存档成功！' : '💾 存档位 '+slot+' 保存成功！');
+  return true;
+}
+
+function autoSave(){
+  saveGame(0);
+}
+
+function loadGame(){
+  const modal = document.getElementById('modal-overlay');
+  const box = document.getElementById('modal-box');
+  let html = '<h3>📂 读取存档</h3>';
+  let hasAny = false;
+
+  // 检查自动存档
+  const autoData = localStorage.getItem(AUTO_SAVE_KEY);
+  if (autoData) {
+    hasAny = true;
+    try {
+      const d = JSON.parse(autoData);
+      html += '<button onclick="restoreSave(\''+AUTO_SAVE_KEY+'\')" style="display:block;width:100%;text-align:left;padding:12px;margin:6px 0;background:#1a1208;border:1px solid #3a2810;color:#daa520;border-radius:3px;cursor:pointer">';
+      html += '🟢 <b>自动存档</b><br>';
+      html += '<span style="font-size:12px;color:#8a6a30">' + d.timestamp + ' | 修为：' + RANK_NAMES[d.player.rank] + '·' + RANK_SUB[d.player.rankSub] + ' | 灵石：' + d.player.gold + '</span>';
+      html += '</button>';
+    } catch(e) {}
+  }
+
+  // 检查手动存档
+  for (let i = 1; i <= MAX_SAVES; i++) {
+    const key = SAVE_KEY + '_' + i;
+    const data = localStorage.getItem(key);
+    if (data) {
+      hasAny = true;
+      try {
+        const d = JSON.parse(data);
+        html += '<button onclick="restoreSave(\''+key+'\')" style="display:block;width:100%;text-align:left;padding:12px;margin:6px 0;background:#1a1208;border:1px solid #3a2810;color:#daa520;border-radius:3px;cursor:pointer">';
+        html += '📁 <b>存档位 ' + i + '</b><br>';
+        html += '<span style="font-size:12px;color:#8a6a30">' + d.timestamp + ' | 修为：' + RANK_NAMES[d.player.rank] + '·' + RANK_SUB[d.player.rankSub] + ' | 灵石：' + d.player.gold + '</span>';
+        html += '</button>';
+      } catch(e) {}
+    }
+  }
+
+  if (!hasAny) {
+    html += '<p style="color:#888;">暂无存档。开始冒险后会自动存档。</p>';
+    html += '<p style="color:#8a6a30;font-size:12px;">💡 游戏会在每次关键事件后自动存档。你也可以点击 💾 存档按钮手动保存到存档位。</p>';
+  } else {
+    html += '<p style="color:#888;font-size:11px;margin-top:8px;">💡 点击存档即可读取。自动存档会在关键事件后更新。</p>';
+  }
+
+  // 手动存档选择
+  html += '<br><div style="display:flex;gap:6px;flex-wrap:wrap">';
+  for (let i = 1; i <= MAX_SAVES; i++) {
+    html += '<button onclick="saveGame('+i+');closeModal();setTimeout(()=>showAchievements(),300)" style="flex:1;min-width:40px;padding:8px">💾 存档'+i+'</button>';
+  }
+  html += '</div>';
+  html += '<br><button onclick="closeModal()" style="width:100%">关闭</button>';
+
+  box.innerHTML = html;
+  modal.classList.add('active');
+}
+
+function restoreSave(key){
+  const raw = localStorage.getItem(key);
+  if (!raw) return;
+  try {
+    const d = JSON.parse(raw);
+    // 恢复player状态
+    const p = d.player;
+    player.rank = p.rank; player.rankSub = p.rankSub;
+    player.hp = p.hp; player.maxHp = p.maxHp;
+    player.essence = p.essence; player.maxEssence = p.maxEssence;
+    player.atk = p.atk; player.def = p.def;
+    player.gold = p.gold;
+    player.apertureSize = p.apertureSize;
+    player.equipment = { ...p.equipment };
+    player.achievements = [...p.achievements];
+    player.killerMoves = [...p.killerMoves];
+    player.storyFlags = { ...p.storyFlags };
+
+    // 重建inventory
+    player.inventory = [];
+    p.inventoryNames.forEach(name => {
+      const data = GU_DATABASE[name];
+      if (data) {
+        player.inventory.push({
+          name, rank: data.rank, type: data.type, effect: data.effect,
+          atk: data.atk || 0, def: data.def || 0, essence: data.essence || 5,
+          poison: data.poison || 0, poisonDuration: data.poisonDuration || 0,
+          slow: data.slow || 0, duration: data.duration || 0,
+          heal: data.heal || 0, revive: data.revive || 0, desc: data.desc
+        });
+      }
+    });
+
+    // 重建apertureSlots
+    player.apertureSlots = [];
+    p.apertureSlotNames.forEach(name => {
+      const gu = player.inventory.find(g => g.name === name);
+      if (gu && player.apertureSlots.length < player.apertureSize) {
+        player.apertureSlots.push(gu);
+      }
+    });
+
+    // 恢复故事
+    currentNode = d.currentNode;
+    document.getElementById('story-output').innerHTML = d.storyHTML || '';
+    document.getElementById('story-output').scrollTop = document.getElementById('story-output').scrollHeight;
+
+    closeModal();
+    updateUI();
+    addLog('system', '📂 存档读取成功！欢迎回来，蛊师 ' + player.name);
+    addLog('system', '修为：' + RANK_NAMES[player.rank] + '·' + RANK_SUB[player.rankSub] + ' | 灵石：' + player.gold);
+
+    // 渲染当前节点的选择
+    const node = getNode(currentNode);
+    if (node) renderChoices(node);
+  } catch(e) {
+    addLog('system', '❌ 存档损坏，无法读取');
+  }
+}
+
+function hasSaveData(){
+  for (let i = 1; i <= MAX_SAVES; i++) {
+    if (localStorage.getItem(SAVE_KEY + '_' + i)) return true;
+  }
+  return !!localStorage.getItem(AUTO_SAVE_KEY);
 }
 
 function addLog(type,msg){
